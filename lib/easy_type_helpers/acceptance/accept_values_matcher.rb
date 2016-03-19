@@ -16,7 +16,6 @@ RSpec::Matchers.define :accept_values do | *values_to_accept|
         manifest = manifest_for(resource_value, actual => value)
         @message = "expected that #{resource_name} would accept value #{value} idempotent on #{actual}, but setting value failed."
         apply_manifest(manifest, :catch_failures => true, :debug => debug)
-        restart_admin_server if restart
         @message = "expected that #{resource_name} would accept value #{value} idempotent on #{actual}, but is not idempotent on second pass"
         apply_manifest(manifest, :catch_failures => true, :debug => debug)
       rescue Beaker::Host::CommandFailure => error
