@@ -9,7 +9,7 @@ RSpec::Matchers.define :reject_values do | *values_to_reject|
   match do | actual|
     fail "You must pass the .with_error(error_message) to this matcher." unless @expected_error_message
     passed = true
-    debug  = false
+    debug   = optional_value(:debug, false)
     values_to_reject.each do | value|
       manifest = manifest_for(resource_value, :ensure => 'absent')
       # First remove the resource
@@ -43,6 +43,15 @@ RSpec::Matchers.define :reject_values do | *values_to_reject|
   failure_message do |actual|
     @message
   end
+
+  def optional_value(name, default)
+    begin
+      self.send(name)
+    rescue NameError
+      default
+    end
+  end
+
 
 end
 

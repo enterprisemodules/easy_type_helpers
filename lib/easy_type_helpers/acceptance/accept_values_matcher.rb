@@ -2,10 +2,9 @@ require 'rspec/expectations'
 
 RSpec::Matchers.define :accept_values do | *values_to_accept|
   match do | actual|
-    restart = optional_value(:restart_before_active, false)
     delete  = optional_value(:delete_before, true)
-    passed = true
-    debug  = false
+    debug   = optional_value(:debug, false)
+    passed  = true
     values_to_accept.each do | value|
       if delete
         manifest = manifest_for(resource_value, :ensure => 'absent')
@@ -17,7 +16,7 @@ RSpec::Matchers.define :accept_values do | *values_to_accept|
         @message = "expected that #{resource_name} would accept value #{value} idempotent on #{actual}, but setting value failed."
         apply_manifest(manifest, :catch_failures => true, :debug => debug)
         @message = "expected that #{resource_name} would accept value #{value} idempotent on #{actual}, but is not idempotent on second pass"
-        apply_manifest(manifest, :catch_failures => true, :debug => debug)
+        apply_manifest(manifest, :catch_changes => true, :debug => debug)
       rescue Beaker::Host::CommandFailure => error
         passed = false
         puts error
