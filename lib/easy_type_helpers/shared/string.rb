@@ -6,6 +6,7 @@ shared_examples "a string" do
   string_with_numbers = 'StringWith1234Numbers'
 
   valid_values = [
+    'absent',
     'lowercasestring',
     'UPPERCASESTRING',
     'MixedCaseString',
