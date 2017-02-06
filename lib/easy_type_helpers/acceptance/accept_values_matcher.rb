@@ -6,16 +6,35 @@ RSpec::Matchers.define :accept_values do | *values_to_accept|
     debug   = optional_value(:debug, false)
     passed  = true
     values_to_accept.each do | value|
-      if delete
-        manifest = manifest_for(resource_value, :ensure => 'absent')
-        # First remove the resource
-        apply_manifest(manifest, :expect_failures => false, :debug => debug)
-      end
+      manifest = manifest_for(resource_value, :ensure => 'absent')
+      # First remove the resource
+      apply_manifest(manifest, :expect_failures => false, :debug => debug) if delete
       begin
+        #
+        # Test the on_create methods
+        #
         manifest = manifest_for(resource_value, actual => value)
-        @message = "expected that #{resource_name} would accept value #{value} idempotent on #{actual}, but setting value failed."
+        @message = "expected that #{resource_name} would accept value #{value} idempotent on #{actual} on create , but setting value failed."
         apply_manifest(manifest, :catch_failures => true, :debug => debug)
-        @message = "expected that #{resource_name} would accept value #{value} idempotent on #{actual}, but is not idempotent on second pass"
+        @message = "expected that #{resource_name} would accept value #{value} idempotent on #{actual}, but is not idempotent on second pass after create"
+        apply_manifest(manifest, :catch_changes => true, :debug => debug)
+        #
+        # Delete it again and restart
+        #
+        manifest = manifest_for(resource_value, :ensure => 'absent')
+        apply_manifest(manifest, :expect_failures => false, :debug => debug)
+        #
+        # Now create an "empty" resource
+        #
+        manifest = manifest_for(resource_value, :ensure => 'present')
+        apply_manifest(manifest, :catch_failures => true, :debug => debug)
+        #
+        # Now do the changes
+        #
+        manifest = manifest_for(resource_value, actual => value)
+        @message = "expected that #{resource_name} would accept value #{value} idempotent on #{actual} on modify, but setting value failed."
+        apply_manifest(manifest, :catch_failures => true, :debug => debug)
+        @message = "expected that #{resource_name} would accept value #{value} idempotent on #{actual}, but is not idempotent on second pass after modify"
         apply_manifest(manifest, :catch_changes => true, :debug => debug)
       rescue Beaker::Host::CommandFailure => error
         passed = false
@@ -44,4 +63,3 @@ RSpec::Matchers.define :accept_values do | *values_to_accept|
   end
 
 end
-
