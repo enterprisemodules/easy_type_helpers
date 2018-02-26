@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = %q{RSpec helpers for easy_type based Puppet types and providers.}
   spec.description   = %q{RSpec helpers for easy_type based Puppet types and providers.}
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
+  spec.homepage      = "https://github.com/enterprisemodules/easy_type_helpers"
 
   # Prevent pushing this gem to RubyGems.org by setting 'allowed_push_host', or
   # delete this section to allow pushing this gem to any host.
