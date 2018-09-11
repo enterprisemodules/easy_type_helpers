@@ -6,7 +6,7 @@ module Helpers
       <%= resource_name -%>{'<%= resource_title -%>':
         <% resource_hash.each do |k,v| -%>
           <% if v.is_a?(String) -%>
-            <%= k -%> => '<%= v -%>',
+            <%= k -%> => "<%= v.to_s.inspect[1..-2] -%>",
           <% else -%>
             <%= k -%> => <%= v -%>,
           <% end -%>
