@@ -8,7 +8,7 @@ RSpec::Matchers.define :accept_values do | *values_to_accept|
     values_to_accept.each do | value|
       manifest = manifest_for(resource_value, :ensure => 'absent')
       # First remove the resource
-      apply_manifest(manifest, :expect_failures => false, :debug => debug) if delete
+      apply_manifest(manifest, :catch_failures => true, :debug => debug) if delete
       begin
         #
         # Test the on_create methods
@@ -22,7 +22,7 @@ RSpec::Matchers.define :accept_values do | *values_to_accept|
         # Delete it again and restart
         #
         manifest = manifest_for(resource_value, :ensure => 'absent')
-        apply_manifest(manifest, :expect_failures => false, :debug => debug)
+        apply_manifest(manifest, :catch_failures => true, :debug => debug)
         #
         # Now create an "empty" resource
         #

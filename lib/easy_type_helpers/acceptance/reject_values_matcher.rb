@@ -13,7 +13,7 @@ RSpec::Matchers.define :reject_values do | *values_to_reject|
     values_to_reject.each do | value|
       manifest = manifest_for(resource_value, :ensure => 'absent')
       # First remove the resource
-      apply_manifest(manifest, :expect_failures => false, :debug => debug)
+      apply_manifest(manifest, :catch_failures => true, :debug => debug)
       begin
         manifest = manifest_for(resource_value, actual => value)
         apply_manifest(manifest, :catch_failures => true, :debug => debug)
