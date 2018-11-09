@@ -2,13 +2,14 @@ require 'rspec/expectations'
 
 RSpec::Matchers.define :accept_values do | *values_to_accept|
   match do | actual|
-    delete  = optional_value(:delete_before, true)
-    debug   = optional_value(:debug, false)
-    passed  = true
+    delete_before = optional_value(:delete_before, true)
+    delete_after  = optional_value(:delete_after, true)
+    debug         = optional_value(:debug, false)
+    passed        = true
     values_to_accept.each do | value|
       manifest = manifest_for(resource_value, :ensure => 'absent')
       # First remove the resource
-      apply_manifest(manifest, :catch_failures => true, :debug => debug) if delete
+      apply_manifest(manifest, :catch_failures => true, :debug => debug) if delete_before
       begin
         #
         # Test the on_create methods
@@ -18,11 +19,13 @@ RSpec::Matchers.define :accept_values do | *values_to_accept|
         apply_manifest(manifest, :catch_failures => true, :debug => debug)
         @message = "expected that #{resource_name} would accept value #{value} idempotent on #{actual}, but is not idempotent on second pass after create"
         apply_manifest(manifest, :catch_changes => true, :debug => debug)
-        #
-        # Delete it again and restart
-        #
-        manifest = manifest_for(resource_value, :ensure => 'absent')
-        apply_manifest(manifest, :catch_failures => true, :debug => debug)
+        if delete_after
+          #
+          # Delete it again and restart
+          #
+          manifest = manifest_for(resource_value, :ensure => 'absent')
+          apply_manifest(manifest, :catch_failures => true, :debug => debug)
+        end
         #
         # Now create an "empty" resource
         #
