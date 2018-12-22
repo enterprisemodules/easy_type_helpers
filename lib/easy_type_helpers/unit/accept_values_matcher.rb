@@ -1,7 +1,7 @@
 require 'rspec/expectations'
 
-RSpec::Matchers.define :accept_values do | *values_to_accept|
-  match do | actual|
+RSpec::Matchers.define :accept_values do |*values_to_accept|
+  match do |actual|
     passed = true
     debug  = false
     extra_attributes = optional_value(:extra_attributes, {})
@@ -29,12 +29,8 @@ RSpec::Matchers.define :accept_values do | *values_to_accept|
   end
 
   def optional_value(name, default)
-    begin
-      self.send(name)
-    rescue NameError
-      default
-    end
+    self.send(name)
+  rescue NameError
+    default
   end
-
-
 end

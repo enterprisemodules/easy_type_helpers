@@ -1,7 +1,6 @@
 require 'rspec/expectations'
 
-RSpec::Matchers.define :reject_values do | *values_to_reject|
-
+RSpec::Matchers.define :reject_values do |*values_to_reject|
   chain :with_error do |error|
     @expected_error_message = error
   end
@@ -41,12 +40,8 @@ RSpec::Matchers.define :reject_values do | *values_to_reject|
   end
 
   def optional_value(name, default)
-    begin
-      self.send(name)
-    rescue NameError
-      default
-    end
+    self.send(name)
+  rescue NameError
+    default
   end
-
 end
-
