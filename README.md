@@ -1,8 +1,9 @@
+[![Enterprise Modules](https://raw.githubusercontent.com/enterprisemodules/public_images/master/banner1.jpg)](https://www.enterprisemodules.com)
+
 # EasyTypeHelpers
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/easy_type_helpers`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+This gem provides custom RSpec matchers which are handy for developing easy_type
+based modules.
 
 ## Installation
 
@@ -22,7 +23,22 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+First require gem in `spec_helper.rb`
+
+```ruby
+require 'easy_type_helpers'
+```
+
+Then you can write tests based on examples from the `lib/easy_type_helpers/shared`.
+
+I. ex.
+
+```ruby
+shared_examples "a port number" do
+  it { is_expected.to accept_values('absent', 7001) }
+  it { is_expected.to reject_values('a', '-1', '1:').with_error('is not valid as a port number') }
+end
+```
 
 ## Development
 
@@ -32,5 +48,4 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/easy_type_helpers.
-
+Bug reports and pull requests are welcome on GitHub at https://github.com/enterprisemodules/easy_type_helpers.

@@ -1,15 +1,14 @@
 require 'rspec/expectations'
 
 RSpec::Matchers.define :reject_values do | *values_to_reject|
-
   chain :with_error do |error|
     @expected_error_message = error
   end
 
-  match do | actual|
-    fail "You must pass the .with_error(error_message) to this matcher." unless @expected_error_message
+  match do |actual|
+    fail 'You must pass the .with_error(error_message) to this matcher.' unless @expected_error_message
     passed = true
-    debug   = optional_value(:debug, false)
+    debug  = optional_value(:debug, false)
     values_to_reject.each do | value|
       manifest = manifest_for(resource_value, :ensure => 'absent')
       # First remove the resource
@@ -45,13 +44,8 @@ RSpec::Matchers.define :reject_values do | *values_to_reject|
   end
 
   def optional_value(name, default)
-    begin
-      self.send(name)
-    rescue NameError
-      default
-    end
+    self.send(name)
+  rescue NameError
+    default
   end
-
-
 end
-

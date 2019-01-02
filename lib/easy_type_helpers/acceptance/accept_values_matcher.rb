@@ -1,7 +1,7 @@
 require 'rspec/expectations'
 
-RSpec::Matchers.define :accept_values do | *values_to_accept|
-  match do | actual|
+RSpec::Matchers.define :accept_values do |*values_to_accept|
+  match do |actual|
     delete_before = optional_value(:delete_before, true)
     delete_after  = optional_value(:delete_after, true)
     debug         = optional_value(:debug, false)
@@ -58,11 +58,8 @@ RSpec::Matchers.define :accept_values do | *values_to_accept|
   end
 
   def optional_value(name, default)
-    begin
-      self.send(name)
-    rescue NameError
-      default
-    end
+    self.send(name)
+  rescue NameError
+    default
   end
-
 end
