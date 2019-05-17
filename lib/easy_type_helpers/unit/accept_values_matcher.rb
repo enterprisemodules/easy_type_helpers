@@ -7,13 +7,12 @@ RSpec::Matchers.define :accept_values do |*values_to_accept|
     extra_attributes = optional_value(:extra_attributes, {})
     values_to_accept.each do | value|
       begin
-        @message = "expected that #{described_class} would accept value #{value}, but it fails."
+        @message = "expected that #{described_class} would accept value #{value}, but it fails with error: "
         all_attributes = extra_attributes.merge(:name => title, described_class => value)
         object_under_test.new(all_attributes)
-      rescue => error
+      rescue => e
         passed = false
-        puts error
-        @message
+        @message += e.message
         break
       end
     end
