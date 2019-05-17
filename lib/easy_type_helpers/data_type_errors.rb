@@ -37,6 +37,13 @@ module EasyTypeHelpers
       '|Valid values are true\, false)' # match top or bottom
     )
   end
+
+  def variant_data_type_error
+    Regexp.new(
+      '( expects a match for Variant' \
+      '|Invalid value)' # match top or bottom
+    )
+  end
 end
 
 RSpec.configure do |c|
