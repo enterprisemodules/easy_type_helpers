@@ -10,8 +10,7 @@ module EasyTypeHelpers
   def integer_data_type_error
     Regexp.new(
       '( expects an Integer value' \
-      '|invalid value for Integer' \
-      '|Invalid integer value)' # match top or bottom
+      '|Invalid value for Integer)'
     )
   end
 
