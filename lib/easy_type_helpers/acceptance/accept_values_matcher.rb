@@ -1,6 +1,15 @@
 require 'rspec/expectations'
 
 RSpec::Matchers.define :accept_values do |*values_to_accept|
+  #
+  # Check if we use Beaker of Litmus
+  #
+  if defined?(Beaker)
+    error_to_catch = Beaker::Host::CommandFailure
+  else
+    error_to_catch = RuntimeError
+  end
+
   match do |actual|
     delete_before = optional_value(:delete_before, true)
     delete_after  = optional_value(:delete_after, true)
@@ -39,7 +48,7 @@ RSpec::Matchers.define :accept_values do |*values_to_accept|
         apply_manifest(manifest, :catch_failures => true, :debug => debug)
         @message = "expected that #{resource_name} would accept value #{value} idempotent on #{actual}, but is not idempotent on second pass after modify"
         apply_manifest(manifest, :catch_changes => true, :debug => debug)
-      rescue Beaker::Host::CommandFailure => error
+      rescue error_to_catch => error
         passed = false
         puts error
         @message

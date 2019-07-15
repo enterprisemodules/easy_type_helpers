@@ -1,6 +1,14 @@
 require 'rspec/expectations'
-
 RSpec::Matchers.define :reject_values do | *values_to_reject|
+  #
+  # Check if we use Beaker of Litmus
+  #
+  if defined?(Beaker)
+    error_to_catch = Beaker::Host::CommandFailure
+  else
+    error_to_catch = RuntimeError
+  end
+
   chain :with_error do |error|
     @expected_error_message = error
   end
@@ -21,7 +29,7 @@ RSpec::Matchers.define :reject_values do | *values_to_reject|
         @message = "expected that #{resource_name} would reject value #{value}, but no rejection was reported."
         passed = false
         break
-      rescue Beaker::Host::CommandFailure => error
+      rescue error_to_catch => error
         #
         # we expected an error, but now also check if the message is ok
         #
