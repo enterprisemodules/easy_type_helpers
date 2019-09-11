@@ -11,6 +11,7 @@ module EasyTypeHelpers
     Regexp.new(
       '( expects an Integer value' \
       '|Invalid value for Integer)' \
+      '|Invalid value for Integer[.*])' \
       '|expects a match for Variant\[.*, Integer\]' \
       '|expects a match for Variant\[.*, Integer\[.*\]\]'
     )
