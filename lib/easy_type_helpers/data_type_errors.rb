@@ -10,7 +10,9 @@ module EasyTypeHelpers
   def integer_data_type_error
     Regexp.new(
       '( expects an Integer value' \
-      '|Invalid value for Integer)'
+      '|Invalid value for Integer' \
+      '|expects a match for Variant\[.*, Integer\]' \
+      '|expects a match for Variant\[.*, Integer\[.*\]\])'
     )
   end
 
