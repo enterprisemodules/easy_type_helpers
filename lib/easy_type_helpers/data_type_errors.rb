@@ -20,7 +20,8 @@ module EasyTypeHelpers
     Regexp.new(
       '( expects an Float value' \
       "|can't convert .* into Float" \
-      '|invalid value for Float)' # match top or bottom
+      '|invalid value for Float' \
+      '|expects a match for Variant\[.*, Float\])' # match top or bottom
     )
   end
 
