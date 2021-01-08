@@ -38,7 +38,7 @@ RSpec::Matchers.define :accept_values do |*values_to_accept|
         #
         # Now create an "empty" resource
         #
-        manifest = manifest_for(resource_value, :ensure => 'present')
+        manifest = manifest_for(resource_value)
         apply_manifest(manifest, :catch_failures => true, :debug => debug)
         #
         # Now do the changes

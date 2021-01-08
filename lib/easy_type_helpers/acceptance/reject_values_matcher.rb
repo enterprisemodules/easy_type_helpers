@@ -15,12 +15,14 @@ RSpec::Matchers.define :reject_values do | *values_to_reject|
 
   match do |actual|
     fail 'You must pass the .with_error(error_message) to this matcher.' unless @expected_error_message
-    passed = true
-    debug  = optional_value(:debug, false)
+    passed        = true
+    delete_before = optional_value(:delete_before, true)
+    delete_after  = optional_value(:delete_after, true)
+    debug         = optional_value(:debug, false)
     values_to_reject.each do | value|
       manifest = manifest_for(resource_value, :ensure => 'absent')
       # First remove the resource
-      apply_manifest(manifest, :catch_failures => true, :debug => debug)
+      apply_manifest(manifest, :catch_failures => true, :debug => debug) if delete_before
       begin
         manifest = manifest_for(resource_value, actual => value)
         apply_manifest(manifest, :catch_failures => true, :debug => debug)
